@@ -5,24 +5,28 @@ let currentTool = 'brush';
 let drawing = false;
 let startX = 0, startY = 0;
 let currentColor = '#000000';
-let strokeWidth = 3;
+let strokeWidth = 3;         // grosor del pincel
+let eraserWidth = 30;        // grosor del borrador
 
 const tools = document.querySelectorAll('.tool');
 const colors = document.querySelectorAll('.color');
 const clearBtn = document.getElementById('clear');
 const saveBtn = document.getElementById('save');
 
+// Herramienta activa
 function setActiveTool(tool) {
     currentTool = tool;
     tools.forEach(btn => btn.classList.toggle('active', btn.dataset.tool === tool));
     updateCursor();
 }
 
+// Color activo
 function setActiveColor(color) {
     currentColor = color;
     colors.forEach(btn => btn.classList.toggle('active', btn.dataset.color === color));
 }
 
+// Cambiar cursor según herramienta
 function updateCursor() {
     switch(currentTool) {
         case 'brush':
@@ -36,10 +40,12 @@ function updateCursor() {
     }
 }
 
-// Eventos toolbar
+// Selección de herramientas
 tools.forEach(btn => {
     btn.addEventListener('click', () => setActiveTool(btn.dataset.tool));
 });
+
+// Selección de colores
 colors.forEach(btn => {
     btn.addEventListener('click', () => setActiveColor(btn.dataset.color));
 });
@@ -49,7 +55,7 @@ clearBtn.addEventListener('click', () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
 
-// Guardar imagen PNG
+// Guardar como imagen
 saveBtn.addEventListener('click', () => {
     const link = document.createElement('a');
     link.download = 'paint-uide.png';
@@ -57,7 +63,7 @@ saveBtn.addEventListener('click', () => {
     link.click();
 });
 
-// Dibujo
+// Funciones de dibujo
 function drawLine(x1, y1, x2, y2) {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
@@ -78,38 +84,44 @@ function drawCircle(x1, y1, x2, y2) {
     ctx.stroke();
 }
 
+// Mouse Down
 canvas.addEventListener('mousedown', e => {
     drawing = true;
     startX = e.offsetX;
     startY = e.offsetY;
+    ctx.lineCap = 'round';
+
     if (currentTool === 'brush' || currentTool === 'eraser') {
+        ctx.lineWidth = currentTool === 'eraser' ? eraserWidth : strokeWidth;
+        ctx.strokeStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
         ctx.beginPath();
         ctx.moveTo(startX, startY);
     }
 });
 
+// Mouse Move
 canvas.addEventListener('mousemove', e => {
     if (!drawing) return;
     const x = e.offsetX;
     const y = e.offsetY;
-    ctx.lineWidth = strokeWidth;
     ctx.lineCap = 'round';
 
     if (currentTool === 'brush') {
+        ctx.lineWidth = strokeWidth;
         ctx.strokeStyle = currentColor;
         ctx.lineTo(x, y);
         ctx.stroke();
     } else if (currentTool === 'eraser') {
-        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = eraserWidth;
+        ctx.strokeStyle = '#ffffff';
         ctx.lineTo(x, y);
         ctx.stroke();
     } else {
-        // Para línea, rect y círculo dibujaremos en 'mousemove' solo si quieres
-        // Aquí simple solución para borrar y volver a dibujar con imagen guardada
-        // Mejor hacerlo en mouseup con snapshot, pero para simplificar no lo implemento aquí
+        // Aquí se puede implementar dibujo en vivo de línea/rectángulo/círculo (opcional)
     }
 });
 
+// Mouse Up
 canvas.addEventListener('mouseup', e => {
     if (!drawing) return;
     drawing = false;
