@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Paint Web UIDE</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <aside class="toolbar">
+            <button class="tool" data-tool="brush" title="Pincel">🖌️</button>
+            <button class="tool" data-tool="line" title="Línea">📏</button>
+            <button class="tool" data-tool="rect" title="Rectángulo">⬛</button>
+            <button class="tool" data-tool="circle" title="Círculo">⚪</button>
+            <button class="tool" data-tool="eraser" title="Borrador">🧽</button>
+            <div class="colors">
+                <button class="color" style="background:black;" data-color="#000"></button>
+                <button class="color" style="background:red;" data-color="#f00"></button>
+                <button class="color" style="background:blue;" data-color="#00f"></button>
+                <button class="color" style="background:green;" data-color="#0a0"></button>
+                <button class="color" style="background:yellow;" data-color="#ff0"></button>
+                <button class="color" style="background:orange;" data-color="#f60"></button>
+                <button class="color" style="background:purple;" data-color="#808"></button>
+                <button class="color" style="background:brown;" data-color="#654321"></button>
+            </div>
+            <button id="clear" title="Limpiar">🗑️ Limpiar</button>
+            <button id="save" title="Guardar">💾 Guardar</button>
+        </aside>
+        <main>
+            <canvas id="canvas" width="800" height="600"></canvas>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+    
